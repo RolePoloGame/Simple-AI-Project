@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e8a09c865433c4497e0af4149697c3, type: 3}
   m_Name: EatParticle
   m_EditorClassIdentifier: 
-  m_ParticleSystem: {fileID: 0}
+  m_ParticleSystem: {fileID: 1780452811916677052, guid: 8ca2c0c0d1217c14092dc58db71c16d7,
+    type: 3}

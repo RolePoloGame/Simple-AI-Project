@@ -3,8 +3,9 @@ using UnityEngine;
 public class EnhancedBehaviour : MonoBehaviour
 {
     #region Properties & Fields
+    [SerializeField]
     protected bool m_IsDebugging = false;
-    protected bool m_IsSuppressingErrors = false 
+    protected bool m_IsSuppressingErrors = false
     #endregion
 ;
     #region Private & Protected Methods

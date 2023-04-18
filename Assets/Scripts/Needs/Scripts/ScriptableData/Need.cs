@@ -1,34 +1,35 @@
 using System;
 using UnityEngine;
+
 [CreateAssetMenu(menuName = "Needs/Need")]
+
 public class Need : ScriptableObject
 {
     [SerializeField]
     private NeedSatisfyer[] m_NeedSatisfyers;
 
-    private NeedSatisfyer m_SelectedSatisfyer;
+    private NeedSatisfactionObject m_SelectedSatisfyer;
 
     public bool HasSatisfyer => m_SelectedSatisfyer != null;
+    public bool IsNeedSatisfied => m_IsNeedSatisfied;
+    [SerializeField]
+    private bool m_IsNeedSatisfied = false;
 
     #region Public methods
-    public NeedSatisfyer[] GetSatysfiers() => m_NeedSatisfyers
-    public void Act()
+    public void SetSatisfier(NeedSatisfactionObject nso) => m_SelectedSatisfyer = nso;
+    public NeedSatisfyer[] GetSatysfiers() => m_NeedSatisfyers;
+    public void Initialize(AIController aiController)
     {
-        if (!HasSatisfyer)
-            FindSatisfyer();
+        m_SelectedSatisfyer.Initialize(aiController);
+        m_IsNeedSatisfied = false;
+    }
+    public void Act(AIController aiController)
+    {
+        if (!HasSatisfyer) return;
+        if (!aiController.GoToTarget()) return;
+        if (IsNeedSatisfied) return;
+        Debug.Log("Attempting need fulfilling...");
+        m_IsNeedSatisfied = m_SelectedSatisfyer.Act(aiController);
     }
     #endregion
-
-    #region Private methods
-    private void FindSatisfyer()
-    {
-        throw new NotImplementedException();
-    }
-
-    private void NotifyCurrentState()
-    {
-
-    } 
-    #endregion
-
 }

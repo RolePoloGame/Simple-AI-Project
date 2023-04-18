@@ -9,7 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68a53ed399495894daa93f8eb14d1d20, type: 3}
-  m_Name: Wait1Seconds
+  m_Script: {fileID: 11500000, guid: 0df2c0de7f9e9ae42b990d6fad8d5944, type: 3}
+  m_Name: Sleepy
   m_EditorClassIdentifier: 
-  m_WaitTime: 1
+  NextState: {fileID: 0}
+  m_Need: {fileID: 11400000, guid: e3d9522afa2174846a5d37f55b88041c, type: 2}
