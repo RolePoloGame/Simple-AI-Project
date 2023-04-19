@@ -18,17 +18,29 @@ public class Need : ScriptableObject
     #region Public methods
     public void SetSatisfier(NeedSatisfactionObject nso) => m_SelectedSatisfyer = nso;
     public NeedSatisfyer[] GetSatysfiers() => m_NeedSatisfyers;
-    public void Initialize(AIController aiController)
+    public void OnEnter(AIController aiController)
     {
-        m_SelectedSatisfyer.Initialize(aiController);
+        m_SelectedSatisfyer.OnEnter(aiController);
         m_IsNeedSatisfied = false;
     }
+
+    public void OnExit(AIController aiController)
+    {
+        m_SelectedSatisfyer.OnExit(aiController);
+        m_IsNeedSatisfied = false;
+    }
+
     public void Act(AIController aiController)
     {
         if (!HasSatisfyer) return;
         if (!aiController.GoToTarget()) return;
         if (IsNeedSatisfied) return;
         m_IsNeedSatisfied = m_SelectedSatisfyer.Act(aiController);
+    }
+
+    public Vector3 GetTarget()
+    {
+        return m_SelectedSatisfyer.transform.position;
     }
     #endregion
 }

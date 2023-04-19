@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,12 +11,17 @@ public class NeedSatisfyer : ScriptableObject
     public bool IsSatisfied => m_IsSatified;
     private bool m_IsSatified = false;
     private int m_CurrentActionIndex = 0;
-    public void Initialize(AIController aiController)
+    public void OnEnter(AIController aiController)
     {
         if (m_NeedActions == null || m_NeedActions.Count == 0) return;
         m_IsSatified = false;
         m_CurrentActionIndex = 0;
         ApplyChange(aiController);
+    }
+
+    public void OnExit(AIController aiController)
+    {
+        m_IsSatified = false;
     }
 
     public void Act(AIController aiController)

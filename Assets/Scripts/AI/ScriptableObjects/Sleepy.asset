@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Sleepy
   m_EditorClassIdentifier: 
   NextState: {fileID: 11400000, guid: b030ee34a10531b43ac9bc64ef80c921, type: 2}
+  Color: {r: 1, g: 0.38484514, b: 0.107547104, a: 1}
   m_IsStateComplete: 0
   m_Need: {fileID: 11400000, guid: e3d9522afa2174846a5d37f55b88041c, type: 2}

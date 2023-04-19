@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Hungry
   m_EditorClassIdentifier: 
   NextState: {fileID: 11400000, guid: b030ee34a10531b43ac9bc64ef80c921, type: 2}
+  Color: {r: 1, g: 0.982017, b: 0.2113207, a: 1}
   m_IsStateComplete: 0
   m_Need: {fileID: 11400000, guid: 89512ed783468f04b946a3750b137ada, type: 2}

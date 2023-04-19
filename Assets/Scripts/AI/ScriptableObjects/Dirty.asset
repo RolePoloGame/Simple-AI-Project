@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Dirty
   m_EditorClassIdentifier: 
   NextState: {fileID: 11400000, guid: b030ee34a10531b43ac9bc64ef80c921, type: 2}
+  Color: {r: 0, g: 0.49862766, b: 1, a: 1}
   m_IsStateComplete: 0
   m_Need: {fileID: 11400000, guid: be8b9769b74756447a248924ea1663a0, type: 2}

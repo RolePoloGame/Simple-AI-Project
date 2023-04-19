@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Fullfilled
   m_EditorClassIdentifier: 
   NextState: {fileID: 0}
+  Color: {r: 0.12641507, g: 1, b: 0.20308337, a: 1}
   m_IsStateComplete: 0

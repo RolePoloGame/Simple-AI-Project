@@ -16,10 +16,21 @@ public class FulfillNeedAIState : AIState
             Transform closestSatisfier = aiController.GetAIScanner().FindClosestNeedSatisfyer<NeedSatisfactionObject>(m_Need.GetSatysfiers());
             if (closestSatisfier == null) return;
             m_Need.SetSatisfier(closestSatisfier.GetComponent<NeedSatisfactionObject>());
-            m_Need.Initialize(aiController);
-            aiController.SetGoToTarget(closestSatisfier.position);
         }
+        aiController.SetGoToTarget(m_Need.GetTarget());
         m_Need.Act(aiController);
         m_IsStateComplete = m_Need.IsNeedSatisfied;
+    }
+
+    public override void OnEnter(AIController aIController)
+    {
+        base.OnEnter(aIController);
+        m_Need.OnEnter(aIController);
+    }
+
+    public override void OnExit(AIController aIController)
+    {
+        base.OnExit(aIController);
+        m_Need.OnExit(aIController);
     }
 }

@@ -16,6 +16,7 @@ public class AIController : EnhancedBehaviour
 
     private AIScanner m_AIScanner;
     private NavMeshAgent m_NavMeshAgent;
+    private TextDisplayController m_DisplayController;
 
     [SerializeField]
     private bool m_IsAwake = false;
@@ -29,10 +30,7 @@ public class AIController : EnhancedBehaviour
     void Awake()
     {
         if (!m_ChooseStateAtRandom) return;
-        int index = Random.Range(0, m_States.Length);
-        m_CurrentState = m_States[index];
-        Log($"Current State set! [{index}]");
-        Log($"Current State is: {m_CurrentState}");
+        SetRandomCurrentState();
     }
 
     private void Update()
@@ -58,7 +56,18 @@ public class AIController : EnhancedBehaviour
         GetNavMeshAgent().ResetPath();
         GetNavMeshAgent().SetDestination(position);
     }
+    /// <summary>
+    /// Set's wheter the AI is awake or not
+    /// </summary>
+    public void SetActive(bool value)
+    {
+        m_IsAwake = value;
+    }
 
+    /// <summary>
+    /// Enables NavMeshAgent to travel to it's destination set by <see cref="SetGoToTarget(Vector3)"/>
+    /// </summary>
+    /// <returns>True if target arrived to the destination, false if didn't or failed to arive</returns>
     public bool GoToTarget()
     {
         if (GetNavMeshAgent().pathPending) return false;
@@ -72,7 +81,17 @@ public class AIController : EnhancedBehaviour
         Log(isClose.BoolColor());
         return isClose;
     }
+    /// <summary>
+    /// Calls Display text on <see cref="TextDisplayController"/>
+    /// </summary>
+    public bool DisplayText(string text, float time = 2.0f)
+    {
+        if (m_DisplayController == null) return false;
+        return m_DisplayController.DisplayText(text, time);
+    }
 
+    public void AttachTextDisplayController(TextDisplayController displayController) => m_DisplayController = displayController;
+    public void DettachTextDisplayController() => m_DisplayController = null;
     #endregion
 
     #region Private Methods
@@ -108,7 +127,9 @@ public class AIController : EnhancedBehaviour
         Log("Disabling AI!".Color(Color.red));
         m_IsAwake = false;
     }
-
+    /// <summary>
+    /// Handles the current state. If it's complete calls change to the next state
+    /// </summary>
     private void HandleCurrentState()
     {
         if (!m_CurrentState.IsComplete)
@@ -117,15 +138,41 @@ public class AIController : EnhancedBehaviour
             m_CurrentState.Act(this);
             return;
         }
-
         Log($"Changing to next state...");
-        m_CurrentState.OnExit(this);
-        m_CurrentState = m_CurrentState.NextState;
+        SetCurrentState(m_CurrentState.NextState);
+    }
+    /// <summary>
+    /// Displays current need in avaliable GUI managers
+    /// </summary>
+    private void SetCurrentNeedInfo()
+    {
+        CurrentNeedGUIManager.Instance.SetText(m_CurrentState.name, m_CurrentState.Color);
+    }
+    /// <summary>
+    /// Sets random <see cref="AIState"/> from <see cref="m_States"/> as a <see cref="m_CurrentState"/>
+    /// </summary>
+    private void SetRandomCurrentState() => SetCurrentState(m_States[Random.Range(0, m_States.Length)]);
+
+    /// <summary>
+    /// Sets given state as a new <see cref="m_CurrentState"/> and calls enter & exit methods
+    /// </summary>
+    /// <param name="newState"></param>
+    private void SetCurrentState(AIState newState)
+    {
+        if (m_CurrentState != null)
+            m_CurrentState.OnExit(this);
+        m_CurrentState = newState;
         if (m_CurrentState != null)
             m_CurrentState.OnEnter(this);
+        Log($"Current State is: {m_CurrentState}");
+        SetCurrentNeedInfo();
     }
-
+    /// <summary>
+    /// Grabs stashed <see cref="NavMeshAgent"/>. If it's null Gets the component from gameobject
+    /// </summary>
+    /// <returns></returns>
     private NavMeshAgent GetNavMeshAgent() => m_NavMeshAgent == null ? m_NavMeshAgent = GetComponent<NavMeshAgent>() : m_NavMeshAgent;
+
 
     #endregion
 }

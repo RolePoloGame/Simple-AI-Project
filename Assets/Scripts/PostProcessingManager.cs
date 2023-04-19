@@ -1,64 +1,71 @@
 using Assets.Scripts.Core;
 using UnityEngine;
 using System.Collections;
-using System;
 using UnityEngine.Rendering;
 
-public class PostProcessingManager : Singleton<PostProcessingManager>
+namespace Assets.Scripts
 {
-    #region Properties & Fields
-    [SerializeField]
-    private GameObject[] m_Volumes = new GameObject[0];
-    #endregion
-
-    /// <summary>
-    /// Fades between Volumes stored in <see cref="m_Volumes"/> in given time
-    /// </summary>
-    /// <param name="nextIndex">index of Volume to which fade in</param>
-    /// <param name="fadeTime">time in which the fade in happens</param>
-    public void SwitchToVolume(int nextIndex, bool isFadeOut, float fadeTime = 0.0f)
+    public class PostProcessingManager : Singleton<PostProcessingManager>
     {
-        if (!VolumesExist()) return;
+        #region Properties & Fields
+        [SerializeField]
+        private GameObject[] m_Volumes = new GameObject[0];
+        #endregion
 
-        bool isIndexCorrect = nextIndex.EvaluateIndex(m_Volumes.Length);
-        if (!isIndexCorrect) return;
-
-        StartCoroutine(Fade(index: nextIndex, fadeTime: fadeTime, isFadeOut));
-    }
-
-    private IEnumerator Fade(int index, float fadeTime, bool isFadeOut)
-    {
-        float time = fadeTime;
-
-        m_Volumes[index].SetActive(true); //fadeOut is already active, isFadeOut is not
-
-        Volume fadeInVolume = m_Volumes[index].GetComponent<Volume>();
-
-        fadeInVolume.weight = isFadeOut ? 0.0f : 1.0f;
-
-        while (true)
+        /// <summary>
+        /// Fades between Volumes stored in <see cref="m_Volumes"/> in given time
+        /// </summary>
+        /// <param name="nextIndex">index of Volume to which fade in</param>
+        /// <param name="fadeTime">time in which the fade in happens</param>
+        public void SwitchToVolume(int nextIndex, bool isFadeOut = false, float fadeTime = 0.0f)
         {
-            if (time <= float.Epsilon) break;
-            time -= Time.deltaTime;
+            if (!VolumesExist()) return;
 
-            float timeRatio = time / fadeTime;
+            bool isIndexCorrect = nextIndex.EvaluateIndex(m_Volumes.Length);
+            if (!isIndexCorrect) return;
 
-            fadeInVolume.weight = isFadeOut ? timeRatio : 1 - timeRatio;
+            StartCoroutine(Fade(index: nextIndex, isFadeOut: isFadeOut, fadeTime: fadeTime));
+        }
+        /// <summary>
+        /// Performs asynchronous fade in or out for a Volume given by index by manipulating it's weight
+        /// </summary>
+        /// <param name="index">index of a Volume from <see cref="m_Volumes"/> array</param>
+        /// <param name="isFadeOut">if set to true perfroms fade out, otherwise perfroms fade in</param>
+        /// <param name="fadeTime">time in which the fadeTime ends</param>
+        /// <returns></returns>
+        private IEnumerator Fade(int index, bool isFadeOut = false, float fadeTime = 0.0f)
+        {
+            float time = fadeTime;
 
-            yield return null;
+            m_Volumes[index].SetActive(true); //fadeOut is already active, isFadeOut is not
+
+            Volume fadeInVolume = m_Volumes[index].GetComponent<Volume>();
+
+            fadeInVolume.weight = isFadeOut ? 0.0f : 1.0f;
+
+            while (time <= float.Epsilon)
+            {
+                time -= Time.deltaTime;
+
+                float timeRatio = time / fadeTime;
+
+                fadeInVolume.weight = isFadeOut ? timeRatio : 1 - timeRatio;
+
+                yield return null;
+            }
+
+            fadeInVolume.weight = !isFadeOut ? 1.0f : 0.0f;
+            m_Volumes[index].SetActive(!isFadeOut); // disabling the faded out volume
         }
 
-        fadeInVolume.weight = !isFadeOut ? 1.0f : 0.0f;
-        m_Volumes[index].SetActive(!isFadeOut); // disabling the faded out volume
-    }
-
-    /// <summary>
-    /// Checks if there were any gameobject assigned to <see cref="m_Volumes"/> 
-    /// </summary>
-    private bool VolumesExist()
-    {
-        if (m_Volumes == null) return false;
-        if (m_Volumes.Length == 0) return false;
-        return true;
+        /// <summary>
+        /// Checks if there were any gameobject assigned to <see cref="m_Volumes"/> 
+        /// </summary>
+        private bool VolumesExist()
+        {
+            if (m_Volumes == null) return false;
+            if (m_Volumes.Length == 0) return false;
+            return true;
+        }
     }
 }

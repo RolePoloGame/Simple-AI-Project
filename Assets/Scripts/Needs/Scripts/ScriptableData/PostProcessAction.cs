@@ -1,3 +1,4 @@
+using Assets.Scripts;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Needs/Need Action/Fade Postprocess")]

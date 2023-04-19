@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [SelectionBase]
@@ -19,11 +20,19 @@ public class NeedSatisfactionObject : EnhancedBehaviour
         if (need == null) return false;
         return m_NeedSatisfyer.Equals(need);
     }
-    public void Initialize(AIController aiController) => m_NeedSatisfyer.Initialize(aiController);
+    public void OnEnter(AIController aiController) => m_NeedSatisfyer.OnEnter(aiController);
+    public void OnExit(AIController aiController) => m_NeedSatisfyer.OnExit(aiController);
     public bool Act(AIController aiController)
     {
         m_NeedSatisfyer.Act(aiController);
-        return m_NeedSatisfyer.IsSatisfied;
-    } 
+        if (m_NeedSatisfyer.IsSatisfied)
+        {
+            m_NeedSatisfyer.OnExit(aiController);
+            return true;
+        }
+
+        return false;
+    }
+
     #endregion
 }

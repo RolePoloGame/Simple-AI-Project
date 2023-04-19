@@ -10,9 +10,6 @@ public abstract class NeedAction : ScriptableObject
         m_IsPerformed = true;
     }
 
-    public abstract void OnEnter(AIController aiController);
-    public virtual void OnExit(AIController aiController)
-    {
-        m_IsPerformed = false;
-    }
+    public virtual void OnEnter(AIController aiController) { m_IsPerformed = false; }
+    public virtual void OnExit(AIController aiController) { m_IsPerformed = false; }
 }
