@@ -2,6 +2,7 @@ using Assets.Scripts.Core;
 using UnityEngine;
 using System.Collections;
 using UnityEngine.Rendering;
+using Assets.Scripts.Core.Utilities;
 
 namespace Assets.Scripts
 {

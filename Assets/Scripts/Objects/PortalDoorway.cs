@@ -1,72 +1,68 @@
-using System;
-using System.Collections;
+using Assets.Scripts.Core;
+using Assets.Scripts.Core.Utilities;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PortalDoorway : EnhancedBehaviour
+namespace Assets.Scripts.Objects
 {
-    #region Properties & Fields
-    [SerializeField]
-    private PortalDoorway m_Exit;
-
-    [SerializeField]
-    private bool m_IsDelayed = false;
-    [SerializeField]
-    private float m_DelayTime = 5.5f;
-    [SerializeField]
-    private float m_Timer = 0.0f;
-    #endregion
-
-    #region Unity Methods
-    void Update()
+    public class PortalDoorway : EnhancedBehaviour
     {
-        if (!m_IsDelayed) return;
-        Log($"{name} is delayed... {m_Timer} < {m_DelayTime}");
-        m_Timer -= Time.deltaTime;
-        m_IsDelayed = m_Timer >= float.Epsilon;
-    }
+        #region Properties & Fields
+        [SerializeField]
+        private PortalDoorway m_Exit;
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (!other.CompareTag("Teleportable")) return;
+        [SerializeField]
+        private bool m_IsDelayed = false;
+        [SerializeField]
+        private float m_DelayTime = 2.5f; //seconds
+        [SerializeField]
+        private float m_Timer = 0.0f;
+        #endregion
 
-        if (m_IsDelayed) return;
-        Delay();
-        m_Exit.Delay();
+        #region Unity Methods
+        private void Update() => HandleDelay();
 
-        Vector3 newPosition = m_Exit.transform.position;
-
-        Transform parent = other.transform.parent; 
-        bool hasHavMesh = parent.TryGetComponent(out NavMeshAgent navMesh);
-        if (!hasHavMesh) return;
-        navMesh.WarpWithPathPreservation(newPosition);
-    }
-
-    #endregion
-
-    #region Private Methods
-
-    private void Delay()
-    {
-        m_IsDelayed = true;
-        m_Timer = m_DelayTime;
-    }
-
-    private IEnumerator ResetNavMesh(Vector3 newPosition, NavMeshAgent navMesh)
-    {
-        Vector3 destination = navMesh.destination;
-        navMesh.ResetPath();
-        navMesh.SetDestination(destination);
-        DateTime dateTime = DateTime.Now;
-        while (navMesh.pathPending || navMesh.pathStatus == NavMeshPathStatus.PathInvalid)
+        void OnTriggerEnter(Collider other)
         {
-            if (dateTime - DateTime.Now > TimeSpan.FromMilliseconds(30000)) break;
-            yield return null;
-        }
-        Log("Finished!");
-        navMesh.isStopped = false;
+            if (!other.CompareTag("Teleportable")) return;
 
-        navMesh.transform.position = newPosition;
+            if (m_IsDelayed) return;
+            //Delays the instant teleport on an exit so object doesn't enter infinite loop of teleportation
+            m_Exit.EnableDelay();
+
+            Vector3 newPosition = m_Exit.transform.position;
+
+            Transform parent = other.transform.parent;
+            bool hasHavMesh = parent.TryGetComponent(out NavMeshAgent navMesh);
+
+            if (!hasHavMesh) return;
+            navMesh.WarpWithPathPreservation(newPosition);
+        }
+
+        #endregion
+
+        #region Private Methods
+        /// <summary>
+        /// Enables delay for a given <see cref="m_DelayTime"/> given in seconds
+        /// </summary>
+        private void EnableDelay()
+        {
+            m_IsDelayed = true;
+            m_Timer = m_DelayTime;
+        }
+
+        /// <summary>
+        /// Handles delay when enabled by <see cref="EnableDelay"/>
+        /// </summary>
+        private void HandleDelay()
+        {
+            if (!m_IsDelayed) return;
+
+            Log($"{name} is delayed... {m_Timer}");
+            m_Timer -= Time.deltaTime;
+            m_IsDelayed = m_Timer >= float.Epsilon;
+        }
+
+        #endregion
     }
-    #endregion
 }

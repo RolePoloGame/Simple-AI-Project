@@ -1,46 +1,53 @@
+using Assets.Scripts;
+using Assets.Scripts.Core;
 using UnityEngine;
 
-public class FaceCamera : EnhancedBehaviour
+namespace Assets.Scripts.GUI
 {
-    #region Properties & Fields
-    private Transform m_Camera;
-    [SerializeField]
-    // FaceCamera doesn't have be updated every tick. Reducing calls for less performance impact
-    private int m_OnceEveryTick = 30;
-    private int m_Counter = 0;
-    #endregion
-
-    #region Unity methods
-    void OnEnable()
+    public class FaceCamera : EnhancedBehaviour
     {
-        LookAtCamera();
-    }
+        #region Properties & Fields
+        private Transform m_Camera;
+        [SerializeField]
+        private int m_OnceEveryTick = 1; // FaceCamera doesn't have be updated every tick
+        private int m_Counter = 0;
+        #endregion
 
-    void Update()
-    {
-        if (m_Counter > 0)
+        #region Unity methods
+        private void OnEnable() => LookAtCamera();
+
+        private void Update()
         {
-            m_Counter--;
-            return;
+            if (m_Counter > 0)
+            {
+                m_Counter--;
+                return;
+            }
+            LookAtCamera();
+            m_Counter = m_OnceEveryTick;
         }
-        LookAtCamera();
-        m_Counter = m_OnceEveryTick;
-    }
-    #endregion
+        #endregion
 
-    #region Private methods
-
-    private void LookAtCamera()
-    {
-        transform.LookAt(transform.position + GetCamera().transform.rotation * Vector3.forward);
-    }
-    private Transform GetCamera()
-    {
-        if (m_Camera == null)
+        #region Private methods
+        /// <summary>
+        /// Rotates this transform so it looks at <see cref="m_Camera"/>
+        /// </summary>
+        private void LookAtCamera()
         {
-            m_Camera = CameraManager.Instance.Camera.transform;
+            transform.LookAt(transform.position + GetCamera().transform.rotation * Vector3.forward);
         }
-        return m_Camera;
+        /// <summary>
+        /// Returns stashed camera's transform or gets it from a <see cref="CameraManager"/>
+        /// </summary>
+        /// <returns></returns>
+        private Transform GetCamera()
+        {
+            if (m_Camera == null)
+            {
+                m_Camera = CameraManager.Instance.Camera.transform;
+            }
+            return m_Camera;
+        }
+        #endregion
     }
-    #endregion
 }

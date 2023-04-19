@@ -2,34 +2,40 @@ using Assets.Scripts.Core;
 using Cinemachine;
 using UnityEngine;
 
-[RequireComponent(typeof(Camera))]
-public class CameraManager : Singleton<CameraManager>
+namespace Assets.Scripts
 {
-    #region Properties & Fields
-    private const int PRIORITY_CAMERA = 20;
-    private const int DEFAULT_CAMERA = 10;
-    private Camera m_Camera;
-    [SerializeField]
-    private CinemachineVirtualCamera[] m_Cameras;
-    [SerializeField]
-    private CinemachineVirtualCamera m_CurrentCamera;
-    #endregion
-
-    #region Public Methods
-    public Camera Camera => m_Camera == null ? m_Camera = GetComponent<Camera>() : m_Camera;
-
-    public void SwitchCamera(int index)
+    [RequireComponent(typeof(Camera))]
+    public class CameraManager : Singleton<CameraManager>
     {
-        if (m_Cameras == null || m_Cameras.Length == 0)
-            return;
-        if (index < 0 || index >= m_Cameras.Length)
-            return;
+        #region Properties & Fields
+        private const int PRIORITY_CAMERA = 20;
+        private const int DEFAULT_CAMERA = 10;
+        private Camera m_Camera;
+        [SerializeField]
+        private CinemachineVirtualCamera[] m_Cameras;
+        [SerializeField]
+        private CinemachineVirtualCamera m_CurrentCamera;
+        #endregion
 
-        CinemachineVirtualCamera newCurrentCamera = m_Cameras[index];
-        newCurrentCamera.m_Priority = PRIORITY_CAMERA;
-        if (m_CurrentCamera != null)
-            m_CurrentCamera.m_Priority = DEFAULT_CAMERA;
-        m_CurrentCamera = newCurrentCamera;
+        #region Public Methods
+        public Camera Camera => m_Camera == null ? m_Camera = GetComponent<Camera>() : m_Camera;
+        /// <summary>
+        /// Switches to <see cref="CinemachineVirtualCamera"/> from an array given by an index
+        /// </summary>
+        /// <param name="index">index in range of an array</param>
+        public void SwitchCamera(int index)
+        {
+            if (m_Cameras == null || m_Cameras.Length == 0)
+                return;
+            if (index < 0 || index >= m_Cameras.Length)
+                return;
+
+            CinemachineVirtualCamera newCurrentCamera = m_Cameras[index];
+            newCurrentCamera.m_Priority = PRIORITY_CAMERA;
+            if (m_CurrentCamera != null)
+                m_CurrentCamera.m_Priority = DEFAULT_CAMERA;
+            m_CurrentCamera = newCurrentCamera;
+        }
+        #endregion
     }
-    #endregion
 }

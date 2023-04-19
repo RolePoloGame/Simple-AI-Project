@@ -1,23 +1,41 @@
+using Assets.Scripts.AI;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Needs/Need Action/Wait (X)")]
-public class WaitNeedAction : NeedAction
+namespace Assets.Scripts.Needs.Scripts.ScriptableData
 {
-    [SerializeField] private float m_WaitTime;
-    private float m_Timer;
-
-    public override void OnEnter(AIController aiController)
+    [CreateAssetMenu(menuName = "Needs/Need Action/Wait (X)")]
+    public class WaitNeedAction : NeedAction
     {
-        m_Timer = m_WaitTime;
-    }
+        #region Properties & Fields
+        [SerializeField] private float m_WaitTime;
+        private float m_Timer;
+        #endregion
 
-    public override void Act(AIController aiController)
-    {
-        if (m_Timer <= float.Epsilon)
+        #region Public methods
+        public override void OnEnter(AIController aiController) => ResetTimer();
+
+        public override void Act(AIController aiController) => WaitAction();
+
+        #endregion
+
+        #region Private methods
+        /// <summary>
+        /// Waits for a given <see cref="m_WaitTime"/> and sets m_IsPerformed if time has elapsed
+        /// </summary>
+        private void WaitAction()
         {
-            m_IsPerformed = true;
-            return;
+            if (m_Timer <= float.Epsilon)
+            {
+                m_IsPerformed = true;
+                return;
+            }
+            m_Timer -= Time.deltaTime;
         }
-        m_Timer -= Time.deltaTime;
+
+        private void ResetTimer()
+        {
+            m_Timer = m_WaitTime;
+        } 
+        #endregion
     }
 }

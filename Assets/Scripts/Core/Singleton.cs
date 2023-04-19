@@ -12,13 +12,13 @@ namespace Assets.Scripts.Core
         /// <summary>
         /// Performs necessary initialization for the Singleton. By default it only logs initialization.
         /// </summary>
-        public virtual void Initialize() => Log($"{name} is initialized.");
+        public virtual void OnInitialize() => Log($"{name} is initialized.");
     }
     public class Singleton<T> : Singleton where T : Component
     {
         public static T Instance { get; protected set; }
 
-        private void Awake() => InstantiateSingleton();
+        protected virtual void Awake() => InstantiateSingleton();
 
         private void InstantiateSingleton()
         {
@@ -31,9 +31,8 @@ namespace Assets.Scripts.Core
                 return;
             }
 
-
             Instance = this as T;
-            Initialize();
+            OnInitialize();
             m_Init = true;
         }
     }

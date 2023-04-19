@@ -1,36 +1,50 @@
-using System;
+using Assets.Scripts.Needs.Scripts.ScriptableData;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "AI/State/Fulfill Need")]
-public class FulfillNeedAIState : AIState
+namespace Assets.Scripts.AI.State
 {
-    [SerializeField]
-    private Need m_Need;
-
-    public override void Act(AIController aiController)
+    [CreateAssetMenu(menuName = "AI/State/Fulfill Need")]
+    public class FulfillNeedAIState : AIState
     {
-        if (m_Need == null) return;
+        #region Properties & Fields
+        [SerializeField]
+        private Need m_Need;
+        #endregion
 
-        if (!m_Need.HasSatisfyer)
+        #region Public methods
+        public override void Act(AIController aiController)
         {
-            Transform closestSatisfier = aiController.GetAIScanner().FindClosestNeedSatisfyer<NeedSatisfactionObject>(m_Need.GetSatysfiers());
-            if (closestSatisfier == null) return;
-            m_Need.SetSatisfier(closestSatisfier.GetComponent<NeedSatisfactionObject>());
+            HandleNeed(aiController);
         }
-        aiController.SetGoToTarget(m_Need.GetTarget());
-        m_Need.Act(aiController);
-        m_IsStateComplete = m_Need.IsNeedSatisfied;
-    }
+        /// <summary>
+        ///  Travels to <see cref="Need"/>'s Target. If no given, searches for one. If arrived at target, performs action. Sets <see cref="m_IsStateComplete"/> if <see cref="Need"/> is satisfied
+        /// </summary>
+        private void HandleNeed(AIController aiController)
+        {
+            if (m_Need == null) return;
 
-    public override void OnEnter(AIController aIController)
-    {
-        base.OnEnter(aIController);
-        m_Need.OnEnter(aIController);
-    }
+            if (!m_Need.HasSatisfyer)
+            {
+                Transform closestSatisfier = aiController.GetAIScanner().FindClosestNeedSatisfyer<NeedSatisfactionObject>(m_Need.GetSatysfiers());
+                if (closestSatisfier == null) return;
+                m_Need.SetSatisfier(closestSatisfier.GetComponent<NeedSatisfactionObject>());
+            }
+            aiController.SetGoToTarget(m_Need.GetTarget());
+            m_Need.Act(aiController);
+            m_IsComplete = m_Need.IsNeedSatisfied;
+        }
 
-    public override void OnExit(AIController aIController)
-    {
-        base.OnExit(aIController);
-        m_Need.OnExit(aIController);
+        public override void OnEnter(AIController aIController)
+        {
+            base.OnEnter(aIController);
+            m_Need.OnEnter(aIController);
+        }
+
+        public override void OnExit(AIController aIController)
+        {
+            base.OnExit(aIController);
+            m_Need.OnExit(aIController);
+        } 
+        #endregion
     }
 }

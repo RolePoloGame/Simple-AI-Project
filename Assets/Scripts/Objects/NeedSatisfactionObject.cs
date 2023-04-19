@@ -1,3 +1,6 @@
+using Assets.Scripts.AI;
+using Assets.Scripts.Core;
+using Assets.Scripts.Needs.Scripts.ScriptableData;
 using System;
 using UnityEngine;
 
@@ -25,7 +28,7 @@ public class NeedSatisfactionObject : EnhancedBehaviour
     public bool Act(AIController aiController)
     {
         m_NeedSatisfyer.Act(aiController);
-        if (m_NeedSatisfyer.IsSatisfied)
+        if (m_NeedSatisfyer.IsPerformed)
         {
             m_NeedSatisfyer.OnExit(aiController);
             return true;

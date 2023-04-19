@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Assets.Scripts.Core.Foundation.Utilities
+namespace Assets.Scripts.Core.Utilities
 {
     public static class ColorUtils
     {
@@ -12,12 +12,16 @@ namespace Assets.Scripts.Core.Foundation.Utilities
         /// <returns>The blended colors.</returns>
         public static Color Blend(this Color color, Color backColor, double amount = 0.5f)
         {
-            float r = (float)((color.r * amount) + (backColor.r * (1 - amount)));
-            float g = (float)((color.g * amount) + (backColor.g * (1 - amount)));
-            float b = (float)((color.b * amount) + (backColor.b * (1 - amount)));
+            float r = (float)(color.r * amount + backColor.r * (1 - amount));
+            float g = (float)(color.g * amount + backColor.g * (1 - amount));
+            float b = (float)(color.b * amount + backColor.b * (1 - amount));
             return new Color(r, g, b);
         }
-
+        /// <summary>
+        /// Returns average color of a gradient
+        /// </summary>
+        /// <param name="width"></param>
+        /// <returns></returns>
         public static Color Average(this Gradient gradient, int width = 10)
         {
             Color col = Color.white;

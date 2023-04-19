@@ -1,15 +1,24 @@
+using Assets.Scripts.AI;
 using System;
 using UnityEngine;
 
-public abstract class NeedAction : ScriptableObject
+namespace Assets.Scripts.Needs.Scripts.ScriptableData
 {
-    public bool IsPerformed => m_IsPerformed;
-    protected bool m_IsPerformed;
-    public virtual void Act(AIController aiController)
+    public abstract class NeedAction : ScriptableObject
     {
-        m_IsPerformed = true;
-    }
+        #region Properties & Fields
+        public bool IsPerformed => m_IsPerformed;
+        protected bool m_IsPerformed;
+        #endregion
 
-    public virtual void OnEnter(AIController aiController) { m_IsPerformed = false; }
-    public virtual void OnExit(AIController aiController) { m_IsPerformed = false; }
+        #region Public methods
+        public virtual void Act(AIController aiController)
+        {
+            m_IsPerformed = true;
+        }
+
+        public virtual void OnEnter(AIController aiController) { m_IsPerformed = false; }
+        public virtual void OnExit(AIController aiController) { m_IsPerformed = false; } 
+        #endregion
+    }
 }
