@@ -10,6 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50e5890e7aee7704b846cb64c2a7908a, type: 3}
-  m_Name: DefaultPostProcessing
+  m_Name: FadeWaterIn
   m_EditorClassIdentifier: 
   m_PostProcessingIndex: 0
+  m_FadeIn: 0
+  m_FadeTime: 0.7

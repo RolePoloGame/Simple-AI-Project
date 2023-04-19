@@ -20,10 +20,8 @@ public class NeedSatisfyer : ScriptableObject
 
     public void Act(AIController aiController)
     {
-        Debug.Log("Performing Need Action...");
         if (m_CurrentAction == null)
         {
-            Debug.Log("Need Satisfied...");
             m_IsSatified = true;
             return;
         }

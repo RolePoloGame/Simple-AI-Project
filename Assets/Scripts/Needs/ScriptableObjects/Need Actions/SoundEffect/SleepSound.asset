@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f791fcc172918d64bb460d3ece1214fe, type: 3}
   m_Name: SleepSound
   m_EditorClassIdentifier: 
-  m_SoundEffect: {fileID: 0}
+  m_SoundEffect: {fileID: 8300000, guid: a382a6a7485c7c446b1068fb9dd2166d, type: 3}

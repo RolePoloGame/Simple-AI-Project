@@ -28,7 +28,6 @@ public class Need : ScriptableObject
         if (!HasSatisfyer) return;
         if (!aiController.GoToTarget()) return;
         if (IsNeedSatisfied) return;
-        Debug.Log("Attempting need fulfilling...");
         m_IsNeedSatisfied = m_SelectedSatisfyer.Act(aiController);
     }
     #endregion

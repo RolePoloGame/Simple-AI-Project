@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0df2c0de7f9e9ae42b990d6fad8d5944, type: 3}
-  m_Name: Dirty
+  m_Script: {fileID: 11500000, guid: 50e5890e7aee7704b846cb64c2a7908a, type: 3}
+  m_Name: FadeWaterOut
   m_EditorClassIdentifier: 
-  NextState: {fileID: 11400000, guid: b030ee34a10531b43ac9bc64ef80c921, type: 2}
-  m_IsStateComplete: 0
-  m_Need: {fileID: 11400000, guid: be8b9769b74756447a248924ea1663a0, type: 2}
+  m_PostProcessingIndex: 0
+  m_IsFadeOut: 1
+  m_FadeTime: 0.7

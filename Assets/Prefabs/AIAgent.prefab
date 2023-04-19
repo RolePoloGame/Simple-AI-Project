@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3760024829100099013}
   m_Layer: 0
   m_Name: Model
-  m_TagString: Untagged
+  m_TagString: Teleportable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: 7907840342947300794}
   m_Layer: 0
   m_Name: AIAgent
-  m_TagString: Untagged
+  m_TagString: Teleportable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -167,11 +167,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b720a7eeaf2d4f044b3d7da2330b08f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_IsDebugging: 0
   m_States:
   - {fileID: 11400000, guid: 6ab869a51f63d934ab987ca5846ab8ed, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  m_IsAwake: 0
+  - {fileID: 11400000, guid: e6e355bf76e8e0d46819cce3157e6590, type: 2}
+  - {fileID: 11400000, guid: da7afcfd59a34444db83e3e76ab023a3, type: 2}
+  m_CurrentState: {fileID: 0}
+  m_IsAwake: 1
   m_ChooseStateAtRandom: 1
 --- !u!114 &7907840342947300794
 MonoBehaviour:
@@ -185,3 +187,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b324b77b5b239b4f85d1037e681216d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_IsDebugging: 0
