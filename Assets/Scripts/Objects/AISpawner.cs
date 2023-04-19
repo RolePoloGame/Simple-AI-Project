@@ -13,7 +13,7 @@ namespace Assets.Scripts.Objects
         #endregion
 
         #region Unity methods
-        private void OnEnable() => SpawnAgent();
+        private void Start() => SpawnAgent();
         #endregion
 
         #region Public method
@@ -22,7 +22,7 @@ namespace Assets.Scripts.Objects
         /// </summary>
         public void SpawnAgent()
         {
-            GameObject spawnedAgend = Instantiate(m_AgentPrefab, transform.position, Quaternion.identity, transform);
+            GameObject spawnedAgend = Instantiate(m_AgentPrefab, transform.position, Quaternion.identity);
             spawnedAgend.name = $"Agent{m_AgentCounter}";
             spawnedAgend.GetComponent<AIController>().SetActive(true);
             m_AgentCounter++;

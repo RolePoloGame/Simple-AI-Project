@@ -150,7 +150,8 @@ namespace Assets.Scripts.AI
         /// </summary>
         private void SetCurrentNeedInfo()
         {
-            CurrentNeedGUIManager.Instance.SetText(m_CurrentState.name, m_CurrentState.Color);
+            if (m_CurrentState == null) return;
+            CurrentNeedGUIManager.Instance?.SetText(m_CurrentState.name, m_CurrentState.Color);
         }
         /// <summary>
         /// Sets random <see cref="AIState"/> from <see cref="m_States"/> as a <see cref="m_CurrentState"/>
