@@ -15,6 +15,7 @@ namespace Assets.Scripts.Needs.Scripts.ScriptableData
         [SerializeField]
         private float m_FadeTime = 0.7f;
         #endregion
+
         #region Public methods
         /// <summary>
         /// Switches to a given post process volume through a <see cref="PostProcessingManager"/> and sets <see cref="m_IsPerformed"/> accordingly

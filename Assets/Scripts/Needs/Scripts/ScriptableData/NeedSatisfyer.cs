@@ -17,21 +17,26 @@ namespace Assets.Scripts.Needs.Scripts.ScriptableData
 
         private int m_CurrentActionIndex = 0;
         #endregion
+
         #region Public methods
         public void OnEnter(AIController aiController)
         {
-            if (m_NeedActions == null || m_NeedActions.Count == 0) return;
+            if (m_NeedActions == null || m_NeedActions.Count == 0)
+            {
+                Debug.Log("Empty!");
+                return;
+            }
+
             ResetActions(aiController);
+            m_IsPerformed = false;
         }
 
         public void OnExit(AIController aiController)
         {
+            m_CurrentActionIndex = 0;
             m_IsPerformed = false;
         }
-        public void Act(AIController aiController)
-        {
-            HandleAction(aiController);
-        }
+        public void Act(AIController aiController) => HandleAction(aiController);
         #endregion
 
         #region Private methods
@@ -84,7 +89,6 @@ namespace Assets.Scripts.Needs.Scripts.ScriptableData
         /// <param name="aiController"></param>
         private void ResetActions(AIController aiController)
         {
-            m_IsPerformed = false;
             m_CurrentActionIndex = 0;
             SetNewCurrentAction(aiController);
         }

@@ -3,6 +3,8 @@ using Assets.Scripts.AI.State;
 using Assets.Scripts.Core;
 using Assets.Scripts.Core.Utilities;
 using Assets.Scripts.GUI;
+using System.Collections.Generic;
+using System.Linq;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -16,6 +18,7 @@ namespace Assets.Scripts.AI
         #region Properties & Fields
         [SerializeField]
         private AIState[] m_States;
+        private static List<int> m_StatesIndexPool;
         [SerializeField, ReadOnly]
         private AIState m_CurrentState = null;
 
@@ -28,6 +31,8 @@ namespace Assets.Scripts.AI
 
         [SerializeField]
         private bool m_ChooseStateAtRandom = true;
+        [SerializeField]
+        private bool m_LessRepetitiveRandom = true;
         #endregion
 
         #region Unity Methods
@@ -81,8 +86,7 @@ namespace Assets.Scripts.AI
 
             bool isClose = GetNavMeshAgent().remainingDistance <= .5f;
             GetNavMeshAgent().isStopped = isClose;
-            Log($"({GetNavMeshAgent().remainingDistance} units) left ({GetNavMeshAgent().destination} <= {transform.position}");
-            Log(isClose.BoolColor());
+            Log($"Arrived :{isClose.BoolColor()} ({GetNavMeshAgent().remainingDistance} units) left to ({GetNavMeshAgent().destination}");
             return isClose;
         }
         /// <summary>
@@ -150,13 +154,26 @@ namespace Assets.Scripts.AI
         /// </summary>
         private void SetCurrentNeedInfo()
         {
-            if (m_CurrentState == null) return;
             CurrentNeedGUIManager.Instance?.SetText(m_CurrentState.name, m_CurrentState.Color);
         }
         /// <summary>
         /// Sets random <see cref="AIState"/> from <see cref="m_States"/> as a <see cref="m_CurrentState"/>
         /// </summary>
-        private void SetRandomCurrentState() => SetCurrentState(m_States[Random.Range(0, m_States.Length)]);
+        private void SetRandomCurrentState()
+        {
+            AIState newState = m_LessRepetitiveRandom ? GetRandomFromPool() : m_States[Random.Range(0, m_States.Length)];
+            SetCurrentState(newState);
+        }
+
+        private AIState GetRandomFromPool()
+        {
+            //Using a pool of unused states the randomness is less repetitive with small count of states
+            if (m_StatesIndexPool == null || m_StatesIndexPool.Count == 0)
+                m_StatesIndexPool = Enumerable.Range(0, m_States.Length).ToList();
+            int index = m_StatesIndexPool[Random.Range(0, m_StatesIndexPool.Count)];
+            m_StatesIndexPool.Remove(index);
+            return m_States[index];
+        }
 
         /// <summary>
         /// Sets given state as a new <see cref="m_CurrentState"/> and calls enter & exit methods
@@ -166,10 +183,14 @@ namespace Assets.Scripts.AI
         {
             if (m_CurrentState != null)
                 m_CurrentState.OnExit(this);
+
             m_CurrentState = newState;
+
             if (m_CurrentState != null)
                 m_CurrentState.OnEnter(this);
+
             Log($"Current State is: {m_CurrentState}");
+            if (m_CurrentState == null) return;
             SetCurrentNeedInfo();
         }
         /// <summary>

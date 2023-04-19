@@ -30,10 +30,9 @@ public class NeedSatisfactionObject : EnhancedBehaviour
         m_NeedSatisfyer.Act(aiController);
         if (m_NeedSatisfyer.IsPerformed)
         {
-            m_NeedSatisfyer.OnExit(aiController);
+            OnExit(aiController);
             return true;
         }
-
         return false;
     }
 

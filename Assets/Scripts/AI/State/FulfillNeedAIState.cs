@@ -23,28 +23,28 @@ namespace Assets.Scripts.AI.State
         {
             if (m_Need == null) return;
 
-            if (!m_Need.HasSatisfyer)
-            {
-                Transform closestSatisfier = aiController.GetAIScanner().FindClosestNeedSatisfyer<NeedSatisfactionObject>(m_Need.GetSatysfiers());
-                if (closestSatisfier == null) return;
-                m_Need.SetSatisfier(closestSatisfier.GetComponent<NeedSatisfactionObject>());
-            }
             aiController.SetGoToTarget(m_Need.GetTarget());
             m_Need.Act(aiController);
             m_IsComplete = m_Need.IsNeedSatisfied;
         }
 
-        public override void OnEnter(AIController aIController)
+        public override void OnEnter(AIController aiController)
         {
-            base.OnEnter(aIController);
-            m_Need.OnEnter(aIController);
+            if (!m_Need.HasSatisfyer)
+            {
+                Transform closestSatisfier = aiController.GetAIScanner().FindClosestNeedSatisfyer<NeedSatisfactionObject>(m_Need.GetSatysfiers());
+                if (closestSatisfier == null) return;
+                m_Need.SetSatisfier(closestSatisfier.GetComponent<NeedSatisfactionObject>(), aiController);
+            }
+            m_Need.OnEnter(aiController);
+            m_IsComplete = false;
         }
 
         public override void OnExit(AIController aIController)
         {
-            base.OnExit(aIController);
             m_Need.OnExit(aIController);
-        } 
+            m_IsComplete = false;
+        }
         #endregion
     }
 }

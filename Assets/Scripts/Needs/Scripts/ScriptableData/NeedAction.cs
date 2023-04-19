@@ -12,13 +12,10 @@ namespace Assets.Scripts.Needs.Scripts.ScriptableData
         #endregion
 
         #region Public methods
-        public virtual void Act(AIController aiController)
-        {
-            m_IsPerformed = true;
-        }
+        public virtual void Act(AIController aiController) { m_IsPerformed = true; }
 
         public virtual void OnEnter(AIController aiController) { m_IsPerformed = false; }
-        public virtual void OnExit(AIController aiController) { m_IsPerformed = false; } 
+        public virtual void OnExit(AIController aiController) { m_IsPerformed = false; }
         #endregion
     }
 }

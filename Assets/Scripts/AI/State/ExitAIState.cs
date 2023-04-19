@@ -14,8 +14,9 @@ namespace Assets.Scripts.AI.State
 
         public override void OnEnter(AIController aIController)
         {
-            aIController.SetGoToTarget(ExitDoorway.Instance.transform.position);
             m_IsComplete = false;
+            aIController.SetGoToTarget(ExitDoorway.Instance.transform.position);
         }
+
     }
 }

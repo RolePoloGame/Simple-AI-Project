@@ -23,7 +23,7 @@ namespace Assets.Scripts.Objects
         public void SpawnAgent()
         {
             GameObject spawnedAgend = Instantiate(m_AgentPrefab, transform.position, Quaternion.identity);
-            spawnedAgend.name = $"Agent{m_AgentCounter}";
+            spawnedAgend.name = $"Agent_{m_AgentCounter}";
             spawnedAgend.GetComponent<AIController>().SetActive(true);
             m_AgentCounter++;
         }
